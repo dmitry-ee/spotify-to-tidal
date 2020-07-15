@@ -13,16 +13,16 @@ For those who care (*like i am*)
 just install
 ```
 ## Configure
-Put .env file in current directory with contents
-
-**NOTE:** Spotify client creds could be obtained from [this instructions](https://spotipy.readthedocs.io/en/2.13.0/#getting-started)
+*Put .env file in current directory with described variables*
 ```
 SPOTIFY_CLIENT_ID=b53ccc1###
 SPOTIFY_CLIENT_SECRET=d10e3###
 TIDAL_LOGIN=your@email.com
 TIDAL_PASSWORD=your_tidal_password
 ```
-Then test it:
+**NOTE:** Spotify client creds could be obtained from [this instructions](https://spotipy.readthedocs.io/en/2.13.0/#getting-started)
+
+Then test it
 ```bash
 just spotify-export-test
 ```
