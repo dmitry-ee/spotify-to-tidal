@@ -63,7 +63,7 @@ just tidal-clean-confirm
 ### Find exact matches between exported Spotify Library and Tidal
 *Performance: ~80 tracks/minute*
 
-*Coverage: 90%*
+*Coverage: 85-90%*
 ```bash
 just tidal-first-processing
 ```
@@ -71,16 +71,17 @@ just tidal-first-processing
 ### Then find lazy matches (lookup only by track name then make match by album)
 *Performance: ~80 tracks/minute*
 
-*Coverage: 5%*
+*Coverage: 0-5%*
 ```bash
-just tidal-first-processing
+just tidal-second-processing
 ```
 
 ### Process the rest manually
-**NOTE:** That really could take some time
+*Coverage: last 5-10%*
 ```bash
 just tidal-manual-processing
 ```
+**NOTE:** That really could take some time
 
 ### Show the unfound rest
 And then just **like** them in Tidal app otherwise **skip** it
