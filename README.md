@@ -1,6 +1,8 @@
 # Spotify to Tidal Migration Toolset
-This toolset will perform controlled import your spotify library (*i mean liked songs*)
+This toolset will perform controlled import your spotify library (*i mean the liked songs*)
+
 So nothing will be messed up (*mostly*)
+
 For those who care (*like i am*)
 
 ## Requirements
@@ -12,6 +14,7 @@ just install
 ```
 ## Configure
 Put .env file in current directory with contents
+
 **NOTE:** Spotify client creds could be obtained from [this instructions](https://spotipy.readthedocs.io/en/2.13.0/#getting-started)
 ```
 SPOTIFY_CLIENT_ID=b53ccc1###
@@ -48,7 +51,7 @@ just export
 ```
 
 ### Clean Tidal library
-Performance: ~100 tracks/minute
+*Performance: ~100 tracks/minute*
 ```bash
 just tidal-clean
 ```
@@ -58,15 +61,17 @@ just tidal-clean-confirm
 ```
 
 ### Find exact matches between exported Spotify Library and Tidal
-Performance: ~80 tracks/minute
+*Performance: ~80 tracks/minute*
+
 Coverage: 90%
 ```bash
 just tidal-first-processing
 ```
 
 ### Then find lazy matches (lookup only by track name then make match by album)
-Performance: ~80 tracks/minute
-Coverage: 5%
+*Performance: ~80 tracks/minute*
+
+*Coverage: 5%*
 ```bash
 just tidal-first-processing
 ```
@@ -78,13 +83,13 @@ just tidal-manual-processing
 ```
 
 ### Show the unfound rest
-And then just like them in Tidal app otherwise skip it
+And then just **like** them in Tidal app otherwise **skip** it
 ```bash
 just tidal-show-non-founds
 ```
 
 ### Import
-Performance: ~90 tracks/minute
+*Performance: ~90 tracks/minute*
 ```bash
 just tidal-import-library
 ```
