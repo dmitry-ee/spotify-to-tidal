@@ -63,7 +63,7 @@ just tidal-clean-confirm
 ### Find exact matches between exported Spotify Library and Tidal
 *Performance: ~80 tracks/minute*
 
-Coverage: 90%
+*Coverage: 90%*
 ```bash
 just tidal-first-processing
 ```
