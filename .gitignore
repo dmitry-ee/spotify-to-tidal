@@ -1,3 +1,5 @@
 .env
 *export.txt
 .spotify-cache
+
+__pycache__
