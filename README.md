@@ -1,5 +1,5 @@
 # Spotify to Tidal Migration Toolset
-This toolset will perform controlled import your spotify library (*i mean the liked songs*)
+This toolset will perform controlled import for your Spotify library (*i mean the liked songs*)
 
 So nothing will be messed up (*mostly*)
 
@@ -98,5 +98,5 @@ And then
 just tidal-import-library-confirm
 ```
 
-## Enjoy your Music
+## Enjoy your Music :tada:
 Like you did that before (or never before)
