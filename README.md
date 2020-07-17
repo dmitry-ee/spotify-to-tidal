@@ -99,5 +99,15 @@ And then
 just tidal-import-library-confirm
 ```
 
+### Export diff between exported library and Tidal library
+```bash
+just tidal-export-diff
+```
+
+### Import custom library file
+```bash
+just tidal-import-library tidal_diff.txt
+```
+
 ## Enjoy your Music :tada:
 Like you did that before (or never before)

@@ -1,4 +1,5 @@
 buffer_file := "spotify-export.txt"
+diff_file := "tidal_diff.txt"
 
 ### SETUP
 # intsall all python deps
@@ -27,11 +28,14 @@ tidal-manual-processing:
 tidal-show-non-founds:
   python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --load {{buffer_file}} --print_non_founds true
 # import library to tidal
-tidal-import-library:
-  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --load {{buffer_file}} --debug true --import_library true
+tidal-import-library LIB=(buffer_file):
+  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --load {{LIB}} --debug true --import_library true
 # confirm import
-tidal-import-library-confirm:
-  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --load {{buffer_file}} --debug true --import_library true --confirm true
+tidal-import-library-confirm LIB=(buffer_file):
+  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --load {{LIB}} --debug true --import_library true --confirm true
+# export diff between saved lib and tidal favorites
+tidal-export-diff:
+  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --load {{buffer_file}} --debug true --export_diff {{diff_file}}
 
 ### TIDAL CLEAN
 # tidal favourites clean
@@ -40,3 +44,8 @@ tidal-clean:
 # tidal favourites clean confirm
 tidal-clean-confirm:
   python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --clean true --confirm true
+# tidal clean by file
+tidal-clean-by-file LIB:
+  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --clean_by_file {{LIB}}
+tidal-clean-by-file-confirm LIB:
+  python3 import-tidal.py $TIDAL_LOGIN $TIDAL_PASSWORD --clean_by_file {{LIB}} --confirm true

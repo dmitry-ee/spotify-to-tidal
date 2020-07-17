@@ -1,4 +1,5 @@
 spotipy
-tidalapi
-tqdm
+# tidalapi
+git+https://github.com/dmitry-ee/python-tidal.git
+tqdm==4.48.0
 jsondatabase

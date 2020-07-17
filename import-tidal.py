@@ -6,6 +6,7 @@ from collections import OrderedDict
 import jsondb
 import argparse
 import time
+import os
 
 parser = argparse.ArgumentParser(description="tidal fav importer")
 parser.add_argument("tidal_login", type=str, help="your tidal login")
@@ -29,6 +30,12 @@ parser.add_argument('--print_non_founds', type=bool, default=False)
 
 # import library
 parser.add_argument("--import_library", type=bool, default=False)
+
+# export diff
+parser.add_argument("--export_diff", type=str)
+
+# clean by file
+parser.add_argument("--clean_by_file", type=str)
 
 # 
 args = parser.parse_args()
@@ -54,11 +61,6 @@ if args.clean:
       tidal.user.favorites.remove_track(track.id)
     log.warning("COMPLETED")
     exit(0)
-
-### LOAD FLAG
-if not args.load:
-  log.exception(f'you must supply flag --load eg: python import-tidal.py my@login my_password --load spotify-export.txt')
-  exit(1)
 
 ### FUNCS
 def format_tidal_track(track):
@@ -207,7 +209,7 @@ def import_library(database_path, confirm=False, retry_count=5, sleep_timeout=5)
           tidal.user.favorites.add_track(track["tidal_id"])
           track["exported_to_tidal"] = True
           break
-        except Exception as e:
+        except Exception:
           # log.exception(e)
           log.exception(f'error during favorites.add_track -> {echo_track(track)}')
           time.sleep(sleep_timeout)
@@ -217,7 +219,59 @@ def import_library(database_path, confirm=False, retry_count=5, sleep_timeout=5)
 
       # print(track["name"])
 
+def export_diff(database_path, diff_path):
+  db = jsondb.Database(database_path)
+  saved_tracks = [track for _, track in db.data().items() if track.get("tidal_id", None) and track.get("tidal_id") != -1]
+  log.warning(f'saved tracks from file {database_path}: {len(saved_tracks)}')
+  tidal_tracks = []
+  tidal._get_items
+  for track in tqdm(tidal.user.favorites.tracks(), unit=" tracks"):
+    tidal_tracks.append(format_tidal_track(track))
+  log.warning(f'loaded tracks from Tidal library: {len(tidal_tracks)}')
+
+  saved_tracks_tids = set(t["tidal_id"] for t in saved_tracks)
+  tidal_tracks_tids = set(t["tidal_id"] for t in tidal_tracks)
+  diff_tids = tidal_tracks_tids - saved_tracks_tids
+  log.warning(f'there\'s {len(diff_tids)} tracks more in Tidal library than inside {database_path}')
+  diff_tracks = [t for t in tidal_tracks if t["tidal_id"] in diff_tids]
+
+  log.warning('found tracks:')
+  for dt in diff_tracks:
+    print(echo_track(dt))
+
+  if os.path.isfile(diff_path):
+    log.warning(f'file {diff_path} exists, going to remove it')
+    os.remove(diff_path)
+  
+  diff_db = jsondb.Database(diff_path)
+  diff_db.data(dictionary={ i: t for i, t in enumerate(diff_tracks) })
+  log.warning(f'diff db "{diff_path}" saved with {len(diff_tracks)} tracks inside!')
+
+def clean_by_file(file_db):
+  db = jsondb.Database(file_db)
+  tracks_to_delete = [track for _, track in db.data().items() if track.get("tidal_id", None) and track.get("tidal_id") != -1]
+  
+  log.warning(f'are you sure going to remove {len(tracks_to_delete)} tracks from your favorites on Tidal?')
+  if not args.confirm:
+    log.warning(f'pass --confirm flag')
+    exit(1)
+  else:
+    log.warning(f'RUNNING TIDAL FAV CLEANUP')
+    for track in tqdm(tracks_to_delete, unit=" tracks"):
+      tidal.user.favorites.remove_track(track["tidal_id"])
+    log.warning("COMPLETED")
+    exit(0)
+
 if __name__ == "__main__":
+  if args.clean_by_file:
+    clean_by_file(args.clean_by_file)
+
+
+  ### LOAD FLAG
+  if not args.load:
+    log.exception(f'you must supply flag --load eg: python import-tidal.py my@login my_password --load spotify-export.txt')
+    exit(1)
+    
   if args.first_processing:
     first_pricessing(args.load, args.find_only_by_track_name, args.process_not_founds, args.ignore_artists_match)
   if args.manual_processing:
@@ -226,3 +280,5 @@ if __name__ == "__main__":
     print_non_founds(args.load)
   if args.import_library:
     import_library(args.load, args.confirm)
+  if args.export_diff:
+    export_diff(args.load, args.export_diff)
